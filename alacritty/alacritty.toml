@@ -12,4 +12,6 @@ opacity = 0.85
 bindings = [
   { key = "F11", action = "ToggleFullscreen" },
   { key = "F10", action = "Minimize" },
+  { key = "Comma", mods = "Control", command = { program = "bash", args = ["-c", "tmux new-window 'vim ~/.config/alacritty/alacritty.toml'"] } },
+  { key = "Period", mods = "Control", command = { program = "bash", args = ["-c", "tmux new-window 'vim ~/.tmux.conf'"] } },
 ]
