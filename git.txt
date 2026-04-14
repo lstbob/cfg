@@ -8,3 +8,7 @@ ssh-add ~/.ssh/id_ed25519
 git remote set-url origin git@github.com:user/repo.git
  # test with
  ssh -T git@github.com
+ 
+
+#DEFFO switch away from nano
+git config --global core.editor "vim"
