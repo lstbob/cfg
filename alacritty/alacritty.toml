@@ -1,5 +1,6 @@
 [general]
 import = ["~/.config/alacritty/themes/themes/gruvbox_dark.toml"]
+#import = ["~/.config/alacritty/themes/themes/gruvbox_light.toml"]
 
 [cursor]
 style = { shape = "Block", blinking = "Always" }
@@ -12,6 +13,11 @@ opacity = 0.85
 bindings = [
   { key = "F11", action = "ToggleFullscreen" },
   { key = "F10", action = "Minimize" },
-  { key = "Comma", mods = "Control", command = { program = "bash", args = ["-c", "tmux new-window 'vim ~/.config/alacritty/alacritty.toml'"] } },
-  { key = "Period", mods = "Control", command = { program = "bash", args = ["-c", "tmux new-window 'vim ~/.tmux.conf'"] } },
+#tmux bindings for configuring
+#shouldn't be part of tmux config as not to confuse session bindings
+  { key = "Comma", mods = "Control", command = { program = "bash", args = ["-c", "tmux new-window 'nvim ~/.config/alacritty/alacritty.toml'"] } },
+  { key = "Period", mods = "Control", command = { program = "bash", args = ["-c", "tmux new-window 'nvim ~/.tmux.conf'"] } },
+  { key = "Home", mods = "Control", command = { program = "bash", args = ["-c", "tmux send-keys 'cd ~' Enter"] } },
+  { key = "End", mods = "Control", command = { program = "bash", args = ["-c", "tmux send-keys 'cd /' Enter"] } },
+  { key = "Slash", mods = "Control", command = { program = "bash", args = ["-c", "tmux new-window 'nvim ~/.bashrc'"] } },
 ]
