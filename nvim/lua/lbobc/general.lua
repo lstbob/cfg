@@ -27,3 +27,11 @@ vim.g.netrw_winsize = 25      -- Set window width
 vim.g.netrw_altv = 1          -- Vertical splits to the right
 vim.opt.ignorecase=true
 vim.opt.smartcase=true
+
+vim.keymap.set('n', '<leader>tb', function()
+  if vim.o.background == 'dark' then
+    vim.o.background = 'light'
+  else
+    vim.o.background = 'dark'
+  end
+end, { desc = 'Toggle background dark/light' })
