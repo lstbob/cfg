@@ -1,0 +1,15 @@
+[general]
+import = ["~/.config/alacritty/themes/themes/gruvbox_dark.toml"]
+
+[cursor]
+style = { shape = "Block", blinking = "Always" }
+
+[window]
+startup_mode = "Fullscreen"
+opacity = 0.85
+
+[keyboard]
+bindings = [
+  { key = "F11", action = "ToggleFullscreen" },
+  { key = "F10", action = "Minimize" },
+]
