@@ -4,6 +4,7 @@ import = ["~/.config/alacritty/themes/themes/gruvbox_dark.toml"]
 
 [cursor]
 style = { shape = "Block", blinking = "Always" }
+blink_interval = 300
 
 [window]
 startup_mode = "Fullscreen"
