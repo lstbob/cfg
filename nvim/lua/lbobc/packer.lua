@@ -13,7 +13,13 @@ return require('packer').startup(function(use)
 --    require('rose-pine').setup({ disable_italics = true })
 --    vim.cmd('colorscheme rose-pine')
 --    	end })
-    
+
+-- debugger
+use { "mfussenegger/nvim-dap" }
+use { "nvim-neotest/nvim-nio" }              -- required by nvim-dap-ui
+use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } }
+use { "theHamsta/nvim-dap-virtual-text", requires = { "mfussenegger/nvim-dap" } }
+
 use('duane9/nvim-rg')
 use{'nvim-treesitter/nvim-treesitter', 
     run = function()
@@ -45,6 +51,10 @@ use { "hrsh7th/cmp-buffer" }
 use { "hrsh7th/cmp-path" }
 use { "L3MON4D3/LuaSnip" }
 use {"mason-org/mason.nvim"}
+use{  'neovim/nvim-lspconfig'}
+use{'williamboman/mason.nvim'}
+use{  'williamboman/mason-lspconfig.nvim'}
+
 use{ "stevearc/conform.nvim"}
 end)
 

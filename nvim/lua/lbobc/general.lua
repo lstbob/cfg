@@ -11,7 +11,7 @@ vim.opt.hlsearch=false
 vim.opt.incsearch=true
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.signcolumn = "number"
+vim.opt.signcolumn = "yes"
 vim.wo.number = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
@@ -28,6 +28,7 @@ vim.g.netrw_altv = 1          -- Vertical splits to the right
 vim.opt.ignorecase=true
 vim.opt.smartcase=true
 
+-- Toggle background
 vim.keymap.set('n', '<leader>tb', function()
   if vim.o.background == 'dark' then
     vim.o.background = 'light'

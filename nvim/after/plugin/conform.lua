@@ -4,9 +4,13 @@ conform.setup({
   formatters_by_ft = {
     cs = { "csharpier" },
     javascript = { "prettierd", "prettier" },
+    css = { "prettierd", "prettier" },
     typescript = { "prettierd", "prettier" },
+    javascriptreact = { "prettierd", "prettier" },
+    typescriptreact = { "prettierd"," prettier" },
     yaml = { "prettierd", "prettier" },
     json = { "prettierd", "prettier" },
+    html = { "prettierd", "prettier" },
     rust = { "rustfmt" },
     go = { "gofmt" },
     python = { "black" },

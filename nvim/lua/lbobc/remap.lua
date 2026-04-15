@@ -11,6 +11,7 @@ vim.keymap.set('n', '<leader>`', function()
     vim.cmd('lcd ~/.config/nvim/')
     vim.cmd('Ex')
 end, {desc = "edit vimrc"} )
+
 -- coppy paste config
 vim.keymap.set('n', '<C-c>', '"+yy', {noremap = true, silent = true}) -- copy curent line
 vim.keymap.set('v', '<C-c>', '"+y', {noremap = true, silent = true}) -- copy curent line in vis mode
@@ -49,6 +50,10 @@ vim.keymap.set('n', '<leader>rf', function()
     vim.cmd(cmd)
 end, { desc = 'Find and replace in current file (current word)' })
 
+-- show errors in dialog and navigate to them
+vim.keymap.set('n', '<leader>se', vim.diagnostic.open_float, { desc = "Show diagnostics under cursor" })
+vim.keymap.set('n', '<C-k>', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
+vim.keymap.set('n', '<C-j>', vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
 
 -- new tab
 vim.keymap.set("n", "<leader>nt", function()

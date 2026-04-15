@@ -4,7 +4,9 @@ require("mason").setup({
         "github:Crashdummyy/mason-registry",
     },
 })
-
+require('mason-lspconfig').setup({
+  ensure_installed = { 'html', 'tsserver','roslyn' ,'deno','prettier', 'prettierd' }
+})
 -- Configure the LSP server with keymaps and settings
 vim.lsp.config("roslyn", {
   on_attach = function(client, bufnr)
