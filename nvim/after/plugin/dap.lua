@@ -65,37 +65,9 @@ local dotnet_config = {
     name = "attach - netcoredbg (pick process)",
     request = "attach",
     processId = function()
-      -- Only show running .NET API processes (native apphost or `dotnet exec X.API.dll`).
-      -- Excludes MSBuild nodes, roslyn LSP, daprd, dotnet run/watch wrappers, AppHost, etc.
-      return require("dap.utils").pick_process({
-        filter = function(proc)
-          local n = proc.name or ""
-          if n == "" then return false end
-          -- Build-time / tooling noise
-          if n:find("MSBuild", 1, true)
-              or n:find("LanguageServer", 1, true)
-              or n:find("roslyn", 1, true)
-              or n:find("daprd", 1, true)
-              or n:find("Aspire.Dashboard", 1, true)
-          then
-            return false
-          end
-          -- `dotnet run` / `dotnet watch` wrappers spawn the real apphost as a child;
-          -- attach to the child, not the wrapper.
-          if n:match("^dotnet%s+run%s") or n:match("^dotnet%s+watch%s") then
-            return false
-          end
-          -- Must live in a build output directory (excludes stray dotnet CLIs)
-          if not (n:find("/bin/Debug/", 1, true) or n:find("/bin/Release/", 1, true)) then
-            return false
-          end
-          -- Must look like an API: ends in .API / .Api, or is dotnet exec *.API.dll / *.Api.dll
-          return n:match("%.API$") or n:match("%.Api$")
-              or n:match("%.API[^%w]") or n:match("%.Api[^%w]")
-        end,
-      })
-    end,
-  },
+    return require("dap.utils").pick_process({})
+  end,
+    }
 }
 
 dap.configurations.cs = dotnet_config
