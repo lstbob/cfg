@@ -1,4 +1,4 @@
--- namspace autogenerate
+-- C# namespace + type declaration autogeneration for newly created .cs files
 vim.api.nvim_create_autocmd("BufNewFile", {
   pattern = "*.cs",
   callback = function()
