@@ -23,9 +23,6 @@ return {
         ["<C-j>"] = cmp.mapping.select_next_item(),         -- Navigate next
         ["<C-k>"] = cmp.mapping.select_prev_item(),         -- Navigate previous
       }),
-      completion = {
-        keyword_pattern = [[\k\+/?]], -- include `/` in keyword detection
-      },
       sources = cmp.config.sources({
         { name = "nvim_lsp" }, -- This sources from your LSP clients, including Roslyn
         { name = "luasnip" },  -- Snippets
