@@ -80,7 +80,7 @@ Defined in `plugins/lsp.lua` via `mason-tool-installer` (`run_on_start = true`):
 
 - **LSP servers:** `roslyn`, `clangd`, `gopls`, `typescript-language-server`,
   `angular-language-server`, `html-lsp`, `css-lsp`
-- **Formatters:** `csharpier`, `prettierd`, `prettier`
+- **Formatters:** `csharpier`, `prettierd`, `prettier`, `goimports`
 - `clang-format` is expected on `$PATH` (installed via the system package manager, not Mason).
 - `netcoredbg` (the .NET debug adapter) is resolved from Mason's install if present, otherwise
   from `$PATH`.
@@ -133,7 +133,7 @@ setting `vim.b.disable_autoformat = true`.
 | `cs` | csharpier |
 | `javascript`, `typescript`, `*react`, `html`, `htmlangular`, `css`, `scss`, `less`, `yaml`, `json` | prettierd → prettier |
 | `rust` | rustfmt |
-| `go` | gofmt |
+| `go` | goimports (gofmt + auto-manages imports) |
 | `python` | black |
 | `c` | clang_format |
 
@@ -189,6 +189,7 @@ Leader is **`<Space>`**.
 | --- | --- |
 | `<leader>gd` | Go to definition |
 | `<leader>fr` | Find references |
+| `<leader>ca` | Code action (add missing import/using, quick fixes) |
 | `<leader>gi` | Go to implementation |
 | `<leader>D` | Type definition |
 | `<leader>dd` | Hover documentation |

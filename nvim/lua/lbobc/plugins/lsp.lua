@@ -31,6 +31,7 @@ return {
         "csharpier",
         "prettierd",
         "prettier",
+        "goimports", -- Go formatter that also adds/removes imports (replaces gofmt)
         -- clang-format: installed via the system package manager (Mason's PyPI
         -- route needs pip, which isn't present); conform finds it on $PATH.
       },

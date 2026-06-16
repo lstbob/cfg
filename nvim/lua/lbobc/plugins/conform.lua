@@ -19,7 +19,7 @@ return {
         yaml = { "prettierd", "prettier" },
         json = { "prettierd", "prettier" },
         rust = { "rustfmt" },
-        go = { "gofmt" },
+        go = { "goimports" }, -- goimports = gofmt + auto add/remove imports on save
         python = { "black" },
         --    sql = { "sqlfluff" },
         c = { "clang_format" },

@@ -12,6 +12,7 @@ M.on_attach = function(client, bufnr)
 
   nmap("<leader>gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
   nmap("<leader>fr", vim.lsp.buf.references, "[G]oto [R]eferences")
+  nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction (add import/using, quick fixes)")
   nmap("<leader>gi", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
   nmap("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
   nmap("<leader>dd", vim.lsp.buf.hover, "Hover Documentation")
