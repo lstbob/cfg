@@ -42,3 +42,28 @@ vim.api.nvim_create_autocmd("BufNewFile", {
     print("\nInserted namespace and declaration!\n")
   end,
 })
+
+-- Subtle background for floating windows + popup/scroll menus under rose-pine.
+-- Editor `Normal` stays transparent (Alacritty opacity); only floats/popups get
+-- a surface lift so hover/diagnostic/telescope/completion/LspInfo boxes are
+-- readable against the code. Re-applies on every colorscheme reload.
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "rose-pine",
+  callback = function()
+    local ok, p = pcall(require, "rose-pine.palette")
+    if not ok then
+      return
+    end
+    -- all floating windows (hover <leader>dd, diagnostic <leader>se,
+    -- <S-j>/<S-k>, telescope, code-action, rename, LspInfo, notify, dap-ui, which-key ...)
+    vim.api.nvim_set_hl(0, "NormalFloat", { bg = p.surface })
+    vim.api.nvim_set_hl(0, "FloatBorder", { fg = p.pine, bg = p.surface })
+    -- completion popup (nvim-cmp) + its scrollbar
+    vim.api.nvim_set_hl(0, "Pmenu", { bg = p.surface })
+    vim.api.nvim_set_hl(0, "PmenuExtra", { bg = p.surface })
+    vim.api.nvim_set_hl(0, "PmenuKind", { bg = p.surface })
+    vim.api.nvim_set_hl(0, "PmenuSel", { bg = p.overlay, fg = p.text })
+    vim.api.nvim_set_hl(0, "PmenuSbar", { bg = p.surface })
+    vim.api.nvim_set_hl(0, "PmenuThumb", { bg = p.muted })
+  end,
+})
