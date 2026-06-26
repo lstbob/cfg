@@ -69,15 +69,27 @@ green "prerequisites present."
 mkdir -p "$PLUGINS_DIR" "$LOCAL_BIN" "$HOME/.config/alacritty" "$NVIM_CONFIG"
 
 # --- tmux plugins (clone if missing) -------------------------------------------
-clone_plugin() { # <repo-url> <dir-name>
-  local url="$1" name="$2" dest="$PLUGINS_DIR/$2"
-  if [ -d "$dest/.git" ]; then info "tmux plugin present: $name"; else
-    info "cloning tmux plugin: $name ..."
-    git clone --depth 1 "$url" "$dest" || die "failed to clone $url"
+clone_plugin() { # <repo-url> <dir-name> <commit>
+  local url="$1" name="$2" commit="$3" dest="$PLUGINS_DIR/$2"
+  if [ -d "$dest/.git" ]; then
+    if [ "$(git -C "$dest" rev-parse HEAD 2>/dev/null)" = "$commit" ]; then
+      info "tmux plugin present + pinned: $name"
+    else
+      info "re-pinning $name to ${commit:0:12} ..."
+      git -C "$dest" fetch --depth 1 origin "$commit" 2>/dev/null \
+        && git -C "$dest" checkout -q --detach "$commit" \
+        || info "could not re-pin $name (offline / commit gone?) — leaving existing checkout."
+    fi
+  else
+    info "cloning tmux plugin: $name @ ${commit:0:12} ..."
+    git clone "$url" "$dest" || die "failed to clone $url"
+    git -C "$dest" checkout -q --detach "$commit" || die "failed to pin $name to $commit"
   fi
 }
-clone_plugin https://github.com/tmux-plugins/tmux-resurrect tmux-resurrect
-clone_plugin https://github.com/rose-pine/tmux tmux-rose-pine
+# Pinned commits (supply-chain): bump deliberately, not on every clone. Verify with
+#   git ls-remote <url> HEAD   before updating.
+clone_plugin https://github.com/tmux-plugins/tmux-resurrect tmux-resurrect cff343cf9e81983d3da0c8562b01616f12e8d548
+clone_plugin https://github.com/rose-pine/tmux              tmux-rose-pine  b6138c51573425ccdc33c91464597323baec3b7e
 
 # --- Debian-side configs: symlink into the repo (run on both OSes) ---------------
 link() { # <target> <link-path>
