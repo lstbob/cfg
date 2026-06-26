@@ -45,6 +45,11 @@ local DECL = {
   indexer_declaration = true,
   property_declaration = true,
   local_function_statement = true,
+  -- Fields/events get a <summary> only, but must be recognized so the comment
+  -- aligns to the field rather than ascending to the enclosing type.
+  field_declaration = true,
+  event_field_declaration = true,
+  event_declaration = true,
 }
 
 -- Declarations that carry a return value worth a <returns> tag.
