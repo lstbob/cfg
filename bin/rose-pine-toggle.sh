@@ -3,11 +3,11 @@
 # Flips all three between rose-pine "main" (dark) and "dawn" (light).
 # Portable: auto-detects WSL vs native Linux to locate the Alacritty config.
 # Override the config path anytime with:  ALACRITTY_CONFIG=/path/to/alacritty.toml
-# Bound to Ctrl+Shift+B in alacritty.windows.toml.
+# Bound to Ctrl+Shift+B in both bindings-linux.toml and bindings-wsl.toml.
 set -uo pipefail
 
 TMUX_CONF="$HOME/.tmux.conf"
-TMUX_PLUGIN="$HOME/clone/path/tmux-rose-pine/rose-pine.tmux"
+TMUX_PLUGIN="$HOME/.local/share/tmux/plugins/tmux-rose-pine/rose-pine.tmux"
 RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
 
 # --- Locate the Alacritty config (OS-dependent) ---

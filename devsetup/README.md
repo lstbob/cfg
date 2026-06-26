@@ -9,9 +9,8 @@ each attached to (or creating) its own persistent **tmux** session.
 | `Opencode (tmux)`    | `opencode`   | opencode logo | Opencode sessions/prompts                |
 
 `tmux new-session -A -s <name>` **attaches** to the session if it exists,
-otherwise **creates** it. So after you save a session (windows/panes), clicking
-the pinned icon restores it — no `tmux-resurrect`/`continuum` plugin is used
-(see `tmux/.tmux.conf`).
+otherwise **creates** it. After reboots, `tmux-resurrect` (now in `tmux/.tmux.conf`)
+can restore saved windows/panes; clicking the pinned icon then reattaches.
 
 ---
 
@@ -111,39 +110,42 @@ Pinned icons persist across logins. Because each has a unique
 
 ## Related configs in this repo
 
-The alacritty config-edit hotkeys (see `alacritty/alacritty.toml`) shell out
+The alacritty config-edit hotkeys (see `alacritty/bindings-linux.toml`) shell out
 to `tmux` + `nvim`, so the **alacritty / tmux / nvim** configs must all be in
-place for those shortcuts to work. Bootstrap is **manual symlinks** — there is
-no install script for them (intentional: `install.sh` only does the dash
-launchers).
+place for those shortcuts to work. The repo's root `setup.sh` wires all of
+them (symlinks on native Linux / copies for the Windows Alacritty bits on WSL).
+`devsetup/install.sh` only handles the two GNOME Dash launchers.
 
-### `alacritty/` — active terminal
+### `alacritty/` — active terminal (split config)
+
+Setup is done by `setup.sh`; it symlinks (native Linux) or copies (WSL) the
+three files below and generates the tiny top-level `alacritty.toml`:
 
 ```bash
-ln -sf /mnt/data/dev/cfg/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
-ln -sfn /mnt/data/dev/cfg/alacritty/themes      ~/.config/alacritty/themes
+# what setup.sh effectively does on native Linux:
+ln -sfn <CFG_DIR>/alacritty/base.toml          ~/.config/alacritty/base.toml
+ln -sfn <CFG_DIR>/alacritty/bindings-linux.toml ~/.config/alacritty/bindings-linux.toml
+ln -sfn <CFG_DIR>/alacritty/themes             ~/.config/alacritty/themes
+# generates ~/.config/alacritty/alacritty.toml  -> imports the three above
 ```
 
-- Theme: `gruvbox_dark` (light is commented out as an alternative; switch by
-  editing the `import` line at the top of `alacritty.toml`).
-- `startup_mode = "Fullscreen"`, **0.85 opacity** (translucent).
-- Cursor: Block, always-blink.
+- `base.toml` — shared (no `[keyboard]`, no theme): `startup_mode="Fullscreen"`, `opacity=0.85`, Block cursor, always-blink.
+- `bindings-{linux,wsl}.toml` — OS-specific `[keyboard]` (bash on Linux, `wsl -d debian` on Windows).
+- Theme: **rose-pine** (`themes/themes/rose_pine.toml`); switch by editing the single `import` line in the generated `alacritty.toml`. (`bin/rose-pine-toggle.sh` exists in the repo as an optional helper but is no longer installed by `setup.sh`.)
 - Hotkeys: `F11` toggle fullscreen, `F10` minimize,
-  `Ctrl+,` edit `alacritty.toml` (new tmux window), `Ctrl+.` edit `.tmux.conf`,
+  `Ctrl+,` edit `alacritty.toml` (new tmux window, via `bin/open-alacritty-config.sh`), `Ctrl+.` edit `.tmux.conf`,
   `Ctrl+/` edit `.bashrc`, `Ctrl+Home` send `cd ~`, `Ctrl+End` send `cd /`.
 
-### `tmux/` — minimal config, **no plugins**
+### `tmux/` — plugins + rose-pine status bar
 
-```bash
-ln -sf /mnt/data/dev/cfg/tmux/.tmux.conf ~/.tmux.conf
-```
+`setup.sh` symlinks `~/.tmux.conf` to `tmux/.tmux.conf` and clones the plugins
+to `~/.local/share/tmux/plugins/{tmux-resurrect,tmux-rose-pine}`.
 
-- **Prefix remapped to `Alt+b`** (default `Ctrl-b` is unbound).
+- **Prefix remapped to `Alt+Space`** (default `Ctrl-b` is unbound).
 - `mouse on`, `base-index`/`pane-base-index` = 1, `mode-keys vi`.
-- No `tpm`, no plugins, no status bar, **no session-restore plugin**.
-  "Restore" in these launchers therefore means *attach-to-existing*, not
-  `tmux-resurrect`. If you want true cross-reboot window/pane restoration,
-  add `tmux-plugins/tmux-resurrect` + `tmux-continuum` yourself.
+- Truecolor passthrough (`tmux-256color` + `terminal-features ",*:RGB"`) so Neovim/rose-pine renders its full palette.
+- Transparent window bg; **tmux-rose-pine** status bar (variant `main`).
+- **tmux-resurrect** is now included for cross-reboot session restore. "Restore" in these devsetup launchers means both *attach-to-existing* after a window close (`tmux new-session -A`) **and** full window/pane restore across a reboot via resurrect.
 
 ### `bash/` — fzf **supplement** (not a standalone bashrc)
 
@@ -205,50 +207,55 @@ SSH key setup + `core.editor=vim` reminders. Reference only; nothing to link.
 
 ## Reproduction on a fresh Debian Trixie machine
 
-Ordered checklist (the order matters — alacritty hotkeys reference tmux+nvim):
+[EITHER machine is "fresh" — native Linux OR WSL Debian.]
 
-1. **Install base tools**
-   ```bash
-   sudo apt update
-   sudo apt install -y tmux neovim ripgrep curl build-essential git
-   ```
-2. **Install Alacritty 0.17+** via cargo (so it lands at `~/.cargo/bin/alacritty`):
-   ```bash
-   cargo install alacritty   # or follow upstream instructions
-   ```
-   (Type-level requirement: Alacritty ≥ 0.17 for `--class` on Wayland.)
-3. **Install opencode**:
-   ```bash
-   curl -fsSL https://opencode.ai/install | bash
-   ```
-4. **Create the dev root and clone this repo there**:
-   ```bash
-   sudo mkdir -p /mnt/data/dev
-   sudo chown "$USER:" /mnt/data/dev
-   git clone git@github.com:lstbob/cfg /mnt/data/dev/cfg
-   ```
-5. **Symlink the config dirs** (before alacritty is first launched):
-   ```bash
-   ln -sf /mnt/data/dev/cfg/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
-   ln -sfn /mnt/data/dev/cfg/alacritty/themes      ~/.config/alacritty/themes
-   ln -sf /mnt/data/dev/cfg/tmux/.tmux.conf        ~/.tmux.conf
-   ln -sfn /mnt/data/dev/cfg/nvim                  ~/.config/nvim
-   # bash is a supplement — source it from your real ~/.bashrc:
-   printf '\n[ -f /mnt/data/dev/cfg/bash/.bashrc ] && source /mnt/data/dev/cfg/bash/.bashrc\n' >> ~/.bashrc
-   ```
-6. **Install the language toolchains** nvim expects (see `nvim/README.md`):
-   Node.js + npm, .NET 10 SDK, Go, clang + clang-format, python3.
-7. **Run the devsetup installer**:
-   ```bash
-   cd /mnt/data/dev/cfg/devsetup
-   ./install.sh
-   ```
-8. **Pin to Dash**: launch "Dev (tmux)" and "Opencode (tmux)" once each from
-   Activities, right-click → Pin to Dash.
-9. **Verify**:
-   ```bash
-   tmux ls        # dev: ..., opencode: ...
-   ```
+- **Install base tools**:
+  ```bash
+  sudo apt update
+  sudo apt install -y tmux ripgrep fzf build-essential git curl xclip neovim
+  ```
+
+  **Manual installs** (these depend on the box; `sudo apt install --no-install-recommends neovim` on trixie is too old — install the upstream tarball):
+
+  ```bash
+  # Alacritty  >= 0.17 (supports --class on Wayland):
+  #   native Linux : cargo install alacritty            # -> ~/.cargo/bin/alacritty
+  #   WSL         : winget install Alacritty.Alacritty  # (run in Windows PowerShell)
+  # opencode:
+  curl -fsSL https://opencode.ai/install | bash
+  # Neovim >= 0.11 (tarball from github.com/neovim/neovim/releases)
+  ```
+
+- **Install the language toolchains** nvim expects (see [`nvim/README.md`](../nvim/README.md)):
+
+  Node.js + npm, .NET 10 SDK, Go, clang + clang-format, python3.
+
+- **Clone this repo**:
+  ```bash
+  # native Linux:
+  sudo mkdir -p /mnt/data/dev && sudo chown "$USER:" /mnt/data/dev
+  git clone git@github.com:lstbob/cfg /mnt/data/dev/cfg
+  # WSL:
+  git clone git@github.com:lstbob/cfg ~/dev/cfg
+  ```
+
+- **Run the unified installer** from inside the repo. `setup.sh` detects WSL vs native Linux and wires everything: symlinks nvim/tmux/bash into the repo, sets up alacritty (symlink on Linux / copy to `%APPDATA%` on WSL), clones tmux plugins, installs `open-alacritty-config.sh`, bootstraps nvim plugins, and (native Linux only) runs `devsetup/install.sh`:
+  ```bash
+  cd <CFG_DIR>            # /mnt/data/dev/cfg | ~/dev/cfg
+  ./setup.sh
+  ```
+
+- **Native Linux only — pin to Dash**: launch "Dev (tmux)" and "Opencode (tmux)" once each from
+  Activities, right-click → **Pin to Dash**.
+
+- **Verify**:
+  ```bash
+  tmux ls                          # dev: ..., opencode: ...
+  tmux show -g prefix              # M-Space
+  tmux show -g @rose_pine_variant  # main
+  nvim -c ':colorscheme' +qa       # rose-pine
+  readlink ~/.config/nvim ~/.tmux.conf   # -> points into the cfg repo
+  ```
 
 ---
 

@@ -1,22 +1,12 @@
-[general]
-import = ["~/.config/alacritty/themes/themes/gruvbox_dark.toml"]
-#import = ["~/.config/alacritty/themes/themes/gruvbox_light.toml"]
-
-[cursor]
-style = { shape = "Block", blinking = "Always" }
-blink_interval = 300
-
-[window]
-startup_mode = "Fullscreen"
-opacity = 0.85
-
+# Keyboard bindings for native Linux (Alacritty runs as a Wayland/X11 app).
+# Hotkeys shell out to the local `bash` (no WSL indirection).
+# Installed to ~/.config/alacritty/bindings-linux.toml by setup.sh (symlinked).
 [keyboard]
 bindings = [
   { key = "F11", action = "ToggleFullscreen" },
   { key = "F10", action = "Minimize" },
-#tmux bindings for configuring
-#shouldn't be part of tmux config as not to confuse session bindings
-  { key = "Comma", mods = "Control", command = { program = "bash", args = ["-c", "tmux new-window 'nvim ~/.config/alacritty/alacritty.toml'"] } },
+  # tmux bindings for configuring (kept out of tmux.conf so session bindings stay clean)
+  { key = "Comma", mods = "Control", command = { program = "bash", args = ["-lc", "$HOME/.local/bin/open-alacritty-config.sh"] } },
   { key = "Period", mods = "Control", command = { program = "bash", args = ["-c", "tmux new-window 'nvim ~/.tmux.conf'"] } },
   { key = "Home", mods = "Control", command = { program = "bash", args = ["-c", "tmux send-keys 'cd ~' Enter"] } },
   { key = "End", mods = "Control", command = { program = "bash", args = ["-c", "tmux send-keys 'cd /' Enter"] } },

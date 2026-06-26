@@ -1,0 +1,15 @@
+# Keyboard bindings for Windows 11 + WSL (Alacritty runs as a Windows app;
+# hotkeys shell into WSL Debian via `wsl -d debian -- bash -lc`).
+# Installed to %APPDATA%\alacritty\bindings-wsl.toml by setup.sh (copied).
+[keyboard]
+bindings = [
+  { key = "F11", action = "ToggleFullscreen" },
+  { key = "F10", action = "Minimize" },
+  { key = "T", mods = "Control", action = "ReceiveChar" },
+  # tmux bindings for configuring (kept out of tmux.conf so session bindings stay clean)
+  { key = "Comma", mods = "Control", command = { program = "wsl", args = ["-d", "debian", "--", "bash", "-lc", "$HOME/.local/bin/open-alacritty-config.sh"] } },
+  { key = "Period", mods = "Control", command = { program = "wsl", args = ["-d", "debian", "--", "bash", "-lc", "tmux new-window 'nvim ~/.tmux.conf'"] } },
+  { key = "Home", mods = "Control", command = { program = "wsl", args = ["-d", "debian", "--", "bash", "-lc", "tmux send-keys 'cd ~' Enter"] } },
+  { key = "End", mods = "Control", command = { program = "wsl", args = ["-d", "debian", "--", "bash", "-lc", "tmux send-keys 'cd /' Enter"] } },
+  { key = "Slash", mods = "Control", command = { program = "wsl", args = ["-d", "debian", "--", "bash", "-lc", "tmux new-window 'nvim ~/.bashrc'"] } },
+]

@@ -1,0 +1,12 @@
+# Shared Alacritty base config — used by both native Linux and Windows/WSL.
+# Contains NO [keyboard] bindings and NO theme import, so it never conflicts
+# with the OS-specific bindings file and never goes stale against the theme.
+# The generated top-level alacritty.toml imports this + the OS bindings + the theme.
+
+[cursor]
+style = { shape = "Block", blinking = "Always" }
+blink_interval = 300
+
+[window]
+startup_mode = "Fullscreen"
+opacity = 0.85
