@@ -7,6 +7,9 @@ return {
     local t = ls.text_node
     local i = ls.insert_node
 
+    -- Needed for the VS-style `///` doc snippet to auto-expand as you type.
+    ls.config.set_config({ enable_autosnippets = true })
+
     -- Load snippets for C# filetype
     ls.add_snippets("cs", {
       -- 1. cdesc/
@@ -63,5 +66,8 @@ return {
       [[<cmd>lua require'luasnip'.jump(-1)<Cr>]],
       { noremap = true }
     )
+
+    -- VS-style `///` XML doc generation (auto-detects the C# member below).
+    require("lbobc.snippets.csharp_doc").setup()
   end,
 }
