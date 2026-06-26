@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Dev (tmux)
+Comment=Alacritty in /mnt/data/dev attached to tmux session: dev
+Exec=/home/lbobc/.cargo/bin/alacritty --class alacritty-dev --title Dev --working-directory /mnt/data/dev -e tmux new-session -A -s dev
+Icon=alacritty-dev
+Terminal=false
+Categories=Development;
+StartupWMClass=alacritty-dev

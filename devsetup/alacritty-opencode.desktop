@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Opencode (tmux)
+Comment=Alacritty in /mnt/data/dev attached to tmux session: opencode
+Exec=/home/lbobc/.cargo/bin/alacritty --class alacritty-opencode --title Opencode --working-directory /mnt/data/dev -e tmux new-session -A -s opencode
+Icon=alacritty-opencode
+Terminal=false
+Categories=Development;
+StartupWMClass=alacritty-opencode
