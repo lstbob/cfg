@@ -81,6 +81,79 @@ return {
     dap.configurations.fsharp = dotnet_config
     dap.configurations.vb = dotnet_config
 
+    -- C/C++ debugger: codelldb (LLDB-based, Mason-installed)
+    local mason_codelldb = vim.fn.stdpath("data") .. "/mason/bin/codelldb"
+    local codelldb_cmd = vim.fn.filereadable(mason_codelldb) == 1
+        and mason_codelldb
+        or "codelldb"
+
+    dap.adapters.codelldb = {
+      type = "server",
+      port = "${port}",
+      executable = {
+        command = codelldb_cmd,
+        args = { "--port", "${port}" },
+      },
+    }
+
+    local c_cpp_config = {
+      {
+        name = "Launch file (codelldb)",
+        type = "codelldb",
+        request = "launch",
+        program = function()
+          return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+        end,
+        cwd = "${workspaceFolder}",
+        stopAtEntry = true,
+      },
+      {
+        name = "Attach to process (codelldb)",
+        type = "codelldb",
+        request = "attach",
+        processId = require("dap.utils").pick_process,
+      },
+    }
+    dap.configurations.c = c_cpp_config
+    dap.configurations.cpp = c_cpp_config
+    dap.configurations.rust = c_cpp_config
+
+    -- Go debugger: delve (dlv, Mason-installed)
+    local mason_dlv = vim.fn.stdpath("data") .. "/mason/bin/dlv"
+    local dlv_cmd = vim.fn.filereadable(mason_dlv) == 1
+        and mason_dlv
+        or "dlv"
+
+    dap.adapters.go = {
+      type = "server",
+      port = "${port}",
+      executable = {
+        command = dlv_cmd,
+        args = { "dap", "-l", "127.0.0.1:${port}" },
+      },
+    }
+
+    dap.configurations.go = {
+      {
+        type = "go",
+        name = "Launch package (dlv)",
+        request = "launch",
+        program = "${fileDirname}",
+      },
+      {
+        type = "go",
+        name = "Launch file (dlv)",
+        request = "launch",
+        program = "${file}",
+      },
+      {
+        type = "go",
+        name = "Attach to process (dlv)",
+        request = "attach",
+        processId = require("dap.utils").pick_process,
+      },
+    }
+
     -- Custom DAP highlight groups (distinct from LSP diagnostics so signs stand out)
     vim.api.nvim_set_hl(0, "DapBreakpointHl",          { fg = "#ef5350", bold = true })   -- bright red
     vim.api.nvim_set_hl(0, "DapBreakpointConditionHl", { fg = "#ffb74d", bold = true })   -- amber

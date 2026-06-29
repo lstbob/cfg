@@ -34,6 +34,9 @@ return {
         "goimports", -- Go formatter that also adds/removes imports (replaces gofmt)
         -- clang-format: installed via the system package manager (Mason's PyPI
         -- route needs pip, which isn't present); conform finds it on $PATH.
+        -- Debug adapters (for nvim-dap)
+        "codelldb", -- C/C++ debugger (LLDB-based)
+        "delve",    -- Go debugger
       },
       run_on_start = true,
       auto_update = false,
