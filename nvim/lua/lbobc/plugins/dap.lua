@@ -116,7 +116,54 @@ return {
     }
     dap.configurations.c = c_cpp_config
     dap.configurations.cpp = c_cpp_config
-    dap.configurations.rust = c_cpp_config
+
+    -- Rust debugger: reuses the codelldb adapter above. Cargo-aware: the
+    -- launch config defaults the program to the freshly-built binary under
+    -- target/debug/<crate> (derived from the Cargo.toml parent dir name) so
+    -- `cargo build` / `cargo run` artifacts are picked up without typing.
+    local function rust_debug_bin()
+      local cwd = vim.fn.getcwd()
+      local crate = vim.fn.fnamemodify(cwd, ":t")
+      -- If a Cargo.toml sits in cwd, use its [package].name; otherwise fall
+      -- back to the directory name (cargo uses the dir name when omitted).
+      local cargo_toml = cwd .. "/Cargo.toml"
+      if vim.fn.filereadable(cargo_toml) == 1 then
+        local lines = vim.fn.readfile(cargo_toml)
+        local in_package = false
+        for _, line in ipairs(lines) do
+          if line:match("^%s*%[") then
+            in_package = line:match("^%s*%[package%]")
+          elseif in_package then
+            local name = line:match('^%s*name%s*=%s*"([^"]+)"')
+            if name then crate = name break end
+          end
+        end
+      end
+      local default = cwd .. "/target/debug/" .. crate
+      local choice = vim.fn.input({
+        prompt = "Path to executable: ",
+        default = default,
+        completion = "file",
+      })
+      return choice ~= "" and choice or default
+    end
+
+    dap.configurations.rust = {
+      {
+        name = "Launch (codelldb, cargo target)",
+        type = "codelldb",
+        request = "launch",
+        program = rust_debug_bin,
+        cwd = "${workspaceFolder}",
+        stopOnEntry = false,
+      },
+      {
+        name = "Attach to process (codelldb)",
+        type = "codelldb",
+        request = "attach",
+        processId = require("dap.utils").pick_process,
+      },
+    }
 
     -- Go debugger: delve (dlv, Mason-installed)
     local mason_dlv = vim.fn.stdpath("data") .. "/mason/bin/dlv"

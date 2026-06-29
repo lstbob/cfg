@@ -3,7 +3,7 @@
 ## Summary
 
 A Neovim configuration focused on **C# / .NET** development, with first-class support
-for **C, Go, JavaScript/TypeScript, React, Angular and HTML/CSS**. Plugins are managed
+for **C, Go, Rust, JavaScript/TypeScript, React, Angular and HTML/CSS**. Plugins are managed
 by [**lazy.nvim**](https://github.com/folke/lazy.nvim) and LSP is wired through Neovim's
 native `vim.lsp` API (no `nvim-lspconfig` needed).
 
@@ -34,6 +34,7 @@ nvim/
         ├── csharp.lua        # roslyn
         ├── c.lua             # clangd
         ├── go.lua            # gopls
+        ├── rust.lua          # rust_analyzer
         ├── typescript.lua    # ts_ls — JavaScript, TypeScript and React (.jsx/.tsx)
         ├── angular.lua       # angularls (ngserver)
         └── html.lua          # html + cssls (HTML / CSS / SCSS / LESS)
@@ -57,6 +58,7 @@ but several of those build against tools that must already be on the host:
 | **Node.js + npm**       | ts_ls, angularls, html/css servers, prettier(d)         |
 | **Go toolchain**        | building/running `gopls`                                |
 | **clang + clang-format**| C language server + C formatting                        |
+| **rustup** (rust-analyzer, rustfmt) | Rust language server + Rust formatting       |
 | **python3**             | some Mason packages                                     |
 
 ## Installation (Debian / Linux)
@@ -98,9 +100,9 @@ but several of those build against tools that must already be on the host:
    nvim
    ```
    - lazy.nvim bootstraps itself and installs every plugin.
-   - `mason-tool-installer` auto-installs the servers/formatters on startup:
-     `roslyn`, `clangd`, `gopls`, `typescript-language-server`,
-     `angular-language-server`, `html-lsp`, `css-lsp`, `csharpier`, `prettierd`, `prettier`.
+- `mason-tool-installer` auto-installs the servers/formatters on startup:
+      `roslyn`, `clangd`, `gopls`, `rust-analyzer`, `typescript-language-server`,
+      `angular-language-server`, `html-lsp`, `css-lsp`, `csharpier`, `prettierd`, `prettier`.
    - Treesitter compiles its parsers (needs the C compiler from step 2).
 
    Watch progress with `:Lazy` and `:Mason`. Give it a minute on the first run.

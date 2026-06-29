@@ -34,6 +34,7 @@ lua/lbobc/
     ├── csharp.lua            -- roslyn
     ├── c.lua                 -- clangd
     ├── go.lua                -- gopls
+    ├── rust.lua               -- rust_analyzer
     ├── typescript.lua        -- ts_ls (also serves React .jsx/.tsx)
     ├── angular.lua           -- angularls (ngserver)
     └── html.lua              -- html + cssls (CSS/SCSS/LESS)
@@ -78,7 +79,7 @@ in `lazy-lock.json`. Each plugin lives in its own spec file under `lua/lbobc/plu
 
 Defined in `plugins/lsp.lua` via `mason-tool-installer` (`run_on_start = true`):
 
-- **LSP servers:** `roslyn`, `clangd`, `gopls`, `typescript-language-server`,
+- **LSP servers:** `roslyn`, `clangd`, `gopls`, `rust-analyzer`, `typescript-language-server`,
   `angular-language-server`, `html-lsp`, `css-lsp`
 - **Formatters:** `csharpier`, `prettierd`, `prettier`, `goimports`
 - `clang-format` is expected on `$PATH` (installed via the system package manager, not Mason).
@@ -101,6 +102,7 @@ from `lsp/shared.lua`.
 | C# / .NET | roslyn | `cs` | Inlay hints, full-solution analysis, code-lens references, unimported-namespace completion |
 | C / C++ | clangd | `c`, `cpp`, `objc`, `objcpp`, `cuda` | Roots on `compile_commands.json`, `.clangd`, etc. |
 | Go | gopls | `go`, `gomod`, `gowork`, `gotmpl` | |
+| Rust | rust_analyzer | `rust` | Roots on `Cargo.toml` / `rust-project.json`; rustfmt for formatting, codelldb for debugging |
 | JS/TS/React | ts_ls | `javascript`, `javascriptreact`, `typescript`, `typescriptreact` | React `.jsx`/`.tsx` = ts_ls + `tsx` treesitter parser |
 | Angular | angularls (ngserver) | `typescript`, `html`, `typescriptreact`, `htmlangular` | Probes project `node_modules`, reads `@angular/core` version; roots on `angular.json`/`nx.json` |
 | HTML | html | `html`, `htmlangular` | Embedded CSS/JS support |

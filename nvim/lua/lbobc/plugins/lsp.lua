@@ -23,6 +23,7 @@ return {
         "roslyn",
         "clangd",
         "gopls",
+        "rust-analyzer",
         "typescript-language-server",
         "angular-language-server",
         "html-lsp",
