@@ -1,14 +1,16 @@
--- C/C++ indentation: real tabs (width 4) to match the clang-format GNU style
--- configured in plugins/conform.lua. Global options.lua sets expandtab=true
--- (spaces); this per-buffer override switches C files to tabs so manual
--- autoindent and the formatter never fight.
+-- C/C++ indentation: real tabs (width 8) to match the Linux kernel
+-- clang-format style configured in plugins/conform.lua. Global options.lua
+-- sets expandtab=true (spaces); this per-buffer override switches C files
+-- to tabs so manual autoindent and the formatter never fight.
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "c", "cpp" },
   callback = function(args)
     vim.bo[args.buf].expandtab = false
-    vim.bo[args.buf].tabstop = 4
-    vim.bo[args.buf].shiftwidth = 4
-    vim.bo[args.buf].softtabstop = 4
+    vim.bo[args.buf].tabstop = 8
+    vim.bo[args.buf].shiftwidth = 8
+    vim.bo[args.buf].softtabstop = 8
+    -- Kernel column limit is 80; align the guide to the formatter.
+    vim.wo[0].colorcolumn = "80"
   end,
 })
 

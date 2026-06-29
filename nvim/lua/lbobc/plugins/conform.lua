@@ -26,11 +26,13 @@ return {
       },
       formatters = {
         clang_format = {
-          -- GNU-based style: Allman braces (opening brace on a new line) +
-          -- real tabs (width 4) for indentation, so manual editing and the
-          -- formatter agree. ColumnLimit 100 matches the colorcolumn guide.
+          -- Linux kernel style: function opening brace on a new line,
+          -- if/else/for/while braces on the same line (BreakBeforeBraces:
+          -- Linux), real tabs (width 8), column limit 80. Mirrors the
+          -- .clang-format in torvalds/linux so manual editing and the
+          -- formatter agree.
           prepend_args = {
-            "--style={BasedOnStyle: GNU, UseTab: Always, TabWidth: 4, IndentWidth: 4, ContinuationIndentWidth: 4, ColumnLimit: 100}",
+            "--style={BasedOnStyle: LLVM, BreakBeforeBraces: Linux, UseTab: Always, TabWidth: 8, IndentWidth: 8, ContinuationIndentWidth: 8, ColumnLimit: 80, SortIncludes: false, AllowShortBlocksOnASingleLine: false, AllowShortCaseLabelsOnASingleLine: false, AllowShortIfStatementsOnASingleLine: Never, AllowShortLoopsOnASingleLine: false, SpaceAfterCStyleCast: false, AlignTrailingComments: true}",
           },
         },
       },
@@ -39,8 +41,8 @@ return {
         if disable_auto_format then
           return
         end
-        -- clang-format is the authoritative C/C++ formatter (GNU style +
-        -- tabs, configured above). Never fall back to clangd's LSP
+        -- clang-format is the authoritative C/C++ formatter (Linux kernel
+        -- style + tabs, configured above). Never fall back to clangd's LSP
         -- formatting, which uses the LLVM default (K&R braces + 2 spaces)
         -- and would fight clang-format.
         local ft = vim.bo[bufnr].filetype
