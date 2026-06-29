@@ -16,5 +16,10 @@ return {
     if #to_install > 0 then
       require("nvim-treesitter").install(to_install):wait(300000)
     end
+    vim.api.nvim_create_autocmd("FileType", {
+        callback = function(args)
+            pcall(vim.treesitter.start, args.buf)
+        end,
+    })
   end,
 }
