@@ -1,3 +1,18 @@
+-- Auto-generate compile_commands.json when opening C/C++ files
+-- if the project has a Makefile but no compilation database yet.
+-- Each directory is checked once (generate() skips if compile_commands.json exists).
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+  pattern = { "*.c", "*.h", "*.cpp", "*.hpp", "*.cc", "*.cxx" },
+  callback = function()
+    require("lbobc.lsp.compile_db").auto_generate()
+  end,
+})
+
+-- User command to manually regenerate
+vim.api.nvim_create_user_command("GenCompileDb", function()
+  require("lbobc.lsp.compile_db").generate()
+end, { desc = "Generate compile_commands.json from Makefile" })
+
 -- C# namespace + type declaration autogeneration for newly created .cs files
 vim.api.nvim_create_autocmd("BufNewFile", {
   pattern = "*.cs",
