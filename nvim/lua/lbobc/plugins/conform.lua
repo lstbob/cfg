@@ -39,6 +39,14 @@ return {
         if disable_auto_format then
           return
         end
+        -- clang-format is the authoritative C/C++ formatter (GNU style +
+        -- tabs, configured above). Never fall back to clangd's LSP
+        -- formatting, which uses the LLVM default (K&R braces + 2 spaces)
+        -- and would fight clang-format.
+        local ft = vim.bo[bufnr].filetype
+        if ft == "c" or ft == "cpp" then
+          return { timeout_ms = 2000, lsp_fallback = false }
+        end
         return { timeout_ms = 500, lsp_fallback = true }
       end,
     })
