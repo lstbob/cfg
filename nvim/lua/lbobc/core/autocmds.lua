@@ -1,3 +1,17 @@
+-- C/C++ indentation: real tabs (width 4) to match the clang-format GNU style
+-- configured in plugins/conform.lua. Global options.lua sets expandtab=true
+-- (spaces); this per-buffer override switches C files to tabs so manual
+-- autoindent and the formatter never fight.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "c", "cpp" },
+  callback = function(args)
+    vim.bo[args.buf].expandtab = false
+    vim.bo[args.buf].tabstop = 4
+    vim.bo[args.buf].shiftwidth = 4
+    vim.bo[args.buf].softtabstop = 4
+  end,
+})
+
 -- Auto-generate compile_commands.json when opening C/C++ files
 -- if the project has a Makefile but no compilation database yet.
 -- Each directory is checked once (generate() skips if compile_commands.json exists).

@@ -24,6 +24,16 @@ return {
         --    sql = { "sqlfluff" },
         c = { "clang_format" },
       },
+      formatters = {
+        clang_format = {
+          -- GNU-based style: Allman braces (opening brace on a new line) +
+          -- real tabs (width 4) for indentation, so manual editing and the
+          -- formatter agree. ColumnLimit 100 matches the colorcolumn guide.
+          prepend_args = {
+            "--style={BasedOnStyle: GNU, UseTab: Always, TabWidth: 4, IndentWidth: 4, ContinuationIndentWidth: 4, ColumnLimit: 100}",
+          },
+        },
+      },
       format_on_save = function(bufnr)
         local disable_auto_format = vim.b[bufnr].disable_autoformat or false
         if disable_auto_format then
