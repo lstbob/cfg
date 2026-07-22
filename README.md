@@ -21,6 +21,7 @@ where the OS differs.
 | `bin/`            | Helper scripts: `open-alacritty-config.sh`, `rose-pine-toggle.sh` | — |
 | `bash/`           | fzf **supplement** (not a full bashrc)                 | —                             |
 | `zsh/`            | Oh My Zsh tracked supplement (sourced from `~/.zshrc`) | —                             |
+| `lazygit/`        | LazyGit config with rose-pine theme (symlinked)        | —                             |
 | `tmux/`           | `tmux.conf`: prefix `Alt+Space`, truecolor, transparent bg, **tmux-resurrect + tmux-rose-pine plugins**, OS-aware clipboard | — |
 | `nvim/`           | Neovim config: lazy.nvim, native `vim.lsp`, C#/.NET-first, **rose-pine** colorscheme | [`nvim/README.md`](nvim/README.md), [`nvim/SETUP.md`](nvim/SETUP.md) |
 | `kitty/`          | Legacy/optional terminal (superseded by alacritty)     | —                             |
