@@ -3,6 +3,13 @@
 # with the OS-specific bindings file and never goes stale against the theme.
 # The generated top-level alacritty.toml imports this + the OS bindings + the theme.
 
+[font]
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+bold_italic = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
+size = 11
+
 [cursor]
 style = { shape = "Block", blinking = "Always" }
 blink_interval = 300
