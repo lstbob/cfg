@@ -90,9 +90,9 @@ work — but recommended for the full terminal experience.
 # 1. Install Oh My Zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-# 2. Install the rose-pine theme (px-rose-pine, agnoster variant)
-curl -sL "https://raw.githubusercontent.com/pixeljae/px-rose-pine.zsh/main/px-rose-pine.zsh-theme" \
-  -o "$ZSH/custom/themes/px-rose-pine.zsh-theme"
+# 2. Install the rose-pine theme — tracked copy of pixeljae/px-rose-pine.zsh
+#    with local tweaks (user@host segment in gold)
+cp zsh/px-rose-pine.zsh-theme "$ZSH/custom/themes/px-rose-pine.zsh-theme"
 
 # 3. Install community plugins
 git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions \
