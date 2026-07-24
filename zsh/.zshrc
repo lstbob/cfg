@@ -1,6 +1,8 @@
 export EDITOR='nvim'
 export VISUAL='nvim'
 
+export PATH="$HOME/.opencode/bin:$PATH"
+
 export KEYTIMEOUT=1
 bindkey -v
 
