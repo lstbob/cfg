@@ -29,9 +29,9 @@ ZSH_AUTOSUGGEST_IGNORE_WIDGETS+=(tab-accept-or-complete)
 export FZF_CTRL_R_OPTS="--bind=tab:accept"
 
 # Monochrome prompt (white on black via the terminal palette): current dir +
-# git branch + dirty marker + prompt char. This runs after oh-my-zsh loads
-# ~/.zshrc's theme (e.g. px-rose-pine) and overrides PROMPT, so the live
-# theme is neutralised without editing the user's ~/.zshrc.
+# git branch + dirty marker + prompt char. The rose-pine zsh theme
+# (px-rose-pine) has been removed; this override keeps the prompt colorless
+# regardless of whatever theme ~/.zshrc may load.
 ZSH_THEME_GIT_PROMPT_PREFIX=" ("
 ZSH_THEME_GIT_PROMPT_SUFFIX=")"
 ZSH_THEME_GIT_PROMPT_DIRTY="*"
