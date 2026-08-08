@@ -1,7 +1,11 @@
 # Shared Alacritty base config — used by both native Linux and Windows/WSL.
 # Contains NO [keyboard] bindings and NO theme import, so it never conflicts
 # with the OS-specific bindings file and never goes stale against the theme.
-# The generated top-level alacritty.toml imports this + the OS bindings + the theme.
+# The generated top-level alacritty.toml imports this + the OS bindings.
+#
+# Minimal white-on-black: opaque pure-black background, white base foreground.
+# The 16-color ANSI palette is left at Alacritty defaults so fzf / nvim syntax
+# highlighting / zsh-syntax-highlighting validity feedback all keep working.
 
 [font]
 normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
@@ -16,4 +20,8 @@ blink_interval = 300
 
 [window]
 startup_mode = "Fullscreen"
-opacity = 0.85
+opacity = 1.0
+
+[colors.primary]
+background = "#000000"
+foreground = "#ffffff"
