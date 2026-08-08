@@ -27,3 +27,14 @@ ZSH_AUTOSUGGEST_IGNORE_WIDGETS+=(tab-accept-or-complete)
 # In the fzf Ctrl+R history popup, Tab accepts the highlighted entry
 # (fzf's default Tab there is multi-select toggle, which does nothing useful).
 export FZF_CTRL_R_OPTS="--bind=tab:accept"
+
+# Monochrome prompt (white on black via the terminal palette): current dir +
+# git branch + dirty marker + prompt char. This runs after oh-my-zsh loads
+# ~/.zshrc's theme (e.g. px-rose-pine) and overrides PROMPT, so the live
+# theme is neutralised without editing the user's ~/.zshrc.
+ZSH_THEME_GIT_PROMPT_PREFIX=" ("
+ZSH_THEME_GIT_PROMPT_SUFFIX=")"
+ZSH_THEME_GIT_PROMPT_DIRTY="*"
+ZSH_THEME_GIT_PROMPT_CLEAN=""
+PROMPT='%~$(git_prompt_info) %# '
+RPROMPT=''

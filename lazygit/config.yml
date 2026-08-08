@@ -1,3 +1,26 @@
-# Default lazygit configuration. Theme-specific overrides removed.
-# lazygit ships sensible built-in defaults; this file is a placeholder so the
-# symlink target still exists until a real preference is added here.
+# Minimal white-on-black theme. All text is white on the terminal's black
+# background; selected/highlighted lines use a dim grey so they stay visible.
+gui:
+  theme:
+    activeBorderColor:
+      - "#ffffff"
+      - bold
+    inactiveBorderColor:
+      - "#ffffff"
+    searchingActiveBorderColor:
+      - "#ffffff"
+      - bold
+    optionsTextColor:
+      - "#ffffff"
+    selectedLineBgColor:
+      - "#333333"
+    cherryPickedCommitBgColor:
+      - "#333333"
+    cherryPickedCommitFgColor:
+      - "#ffffff"
+    unstagedChangesColor:
+      - "#ffffff"
+    defaultFgColor:
+      - "#ffffff"
+    searchingActiveColor:
+      - "#ffffff"
