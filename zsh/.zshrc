@@ -38,3 +38,11 @@ ZSH_THEME_GIT_PROMPT_DIRTY="*"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 PROMPT='%~$(git_prompt_info) %# '
 RPROMPT=''
+
+# Remove all remaining colors from the shell. Both plugins are loaded by
+# oh-my-zsh (plugins=() in ~/.zshrc) BEFORE this file runs, but they re-read
+# their state at paint time, so overriding here neutralises them:
+#  - zsh-syntax-highlighting: stop painting commands green/red/etc.
+ZSH_HIGHLIGHT_HIGHLIGHTERS=()
+#  - zsh-autosuggestions: no grey tint on inline suggestions (plain white)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=white'
