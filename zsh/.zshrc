@@ -46,3 +46,9 @@ RPROMPT=''
 ZSH_HIGHLIGHT_HIGHLIGHTERS=()
 #  - zsh-autosuggestions: no grey tint on inline suggestions (plain white)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=white'
+
+# Disable ls/dir listing colors (oh-my-zsh aliases ls to `ls --color=tty`),
+# so directories and files no longer show purple/colored.
+unalias ls 2>/dev/null || true
+alias ls='ls --color=never'
+unset LS_COLORS
