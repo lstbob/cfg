@@ -1,26 +1,26 @@
+# Minimal white-on-black theme. All text is white on the terminal's black
+# background; selected/highlighted lines use a dim grey so they stay visible.
 gui:
   theme:
     activeBorderColor:
-      - "#ebbcba"
+      - "#ffffff"
       - bold
     inactiveBorderColor:
-      - "#6e6a86"
+      - "#ffffff"
     searchingActiveBorderColor:
-      - "#f6c177"
+      - "#ffffff"
       - bold
     optionsTextColor:
-      - "#9ccfd8"
+      - "#ffffff"
     selectedLineBgColor:
-      - "#26233a"
+      - "#333333"
     cherryPickedCommitBgColor:
-      - "#403d52"
+      - "#333333"
     cherryPickedCommitFgColor:
-      - "#c4a7e7"
+      - "#ffffff"
     unstagedChangesColor:
-      - "#eb6f92"
+      - "#ffffff"
     defaultFgColor:
-      - "#e0def4"
+      - "#ffffff"
     searchingActiveColor:
-      - "#f6c177"
-  authorColors:
-    "*": "#c4a7e7"
+      - "#ffffff"

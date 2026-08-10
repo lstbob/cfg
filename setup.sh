@@ -77,7 +77,6 @@ clone_plugin() { # <repo-url> <dir-name>
   fi
 }
 clone_plugin https://github.com/tmux-plugins/tmux-resurrect tmux-resurrect
-clone_plugin https://github.com/rose-pine/tmux tmux-rose-pine
 
 # --- Debian-side configs: symlink into the repo (run on both OSes) ---------------
 link() { # <target> <link-path>
@@ -125,7 +124,8 @@ else
   info "symlinked alacritty base/bindings/themes"
 fi
 
-# Generate the top-level alacritty.toml (imports base + OS bindings + rose-pine theme).
+# Generate the top-level alacritty.toml (imports base + OS bindings; no theme
+# import so Alacritty uses its built-in default colors).
 ALA_TOP="$ALA_DIR/alacritty.toml"
 if [ "$IS_WSL" = 1 ]; then
   # Windows: ~ expands to %USERPROFILE% inside Alacritty; use backslash paths.
@@ -135,7 +135,6 @@ if [ "$IS_WSL" = 1 ]; then
 import = [
   "~\\AppData\\Roaming\\alacritty\\base.toml",
   "~\\AppData\\Roaming\\alacritty\\bindings-wsl.toml",
-  "~\\AppData\\Roaming\\alacritty\\themes\\themes\\rose_pine.toml",
 ]
 EOF
 else
@@ -145,13 +144,12 @@ else
 import = [
   "~/.config/alacritty/base.toml",
   "~/.config/alacritty/bindings-linux.toml",
-  "~/.config/alacritty/themes/themes/rose_pine.toml",
 ]
 EOF
 fi
 info "generated $ALA_TOP"
 
-# --- nvim plugin bootstrap (lazy.nvim installs rose-pine + builds fzf-native) --
+# --- nvim plugin bootstrap (lazy.nvim installs plugins + builds fzf-native) ---
 info "bootstrapping nvim plugins (lazy.nvim sync) ..."
 nvim --headless "+Lazy! sync" +qa 2>/dev/null || info "nvim headless sync returned non-zero — re-run :Lazy sync inside nvim if plugins look absent."
 
@@ -160,7 +158,7 @@ if [ "$IS_WSL" = 1 ]; then
   bold "WSL setup complete. Remaining MANUAL steps:"
   echo "  1. Ensure Alacritty is installed on Windows (winget install Alacritty.Alacritty)."
   echo "  2. (Re)start Alacritty on Windows; it reads %APPDATA%\\alacritty\\alacritty.toml."
-  echo "  3. In a WSL tmux session: tmux source-file ~/.tmux.conf  (to pick up new prefix/theme)."
+  echo "  3. In a WSL tmux session: tmux source-file ~/.tmux.conf  (to pick up new prefix)."
   echo "  4. Open nvim once and run :Lazy sync if checks complained."
   echo "  5. (optional) pin Alacritty to the Windows taskbar."
 else
@@ -171,7 +169,7 @@ else
   fi
   bold "Native Linux setup complete. Remaining MANUAL steps:"
   echo "  1. Restart Alacritty (or any running instance) to pick up the new config."
-  echo "  2. In tmux: tmux source-file ~/.tmux.conf  (or restart tmux) for new prefix/theme."
+  echo "  2. In tmux: tmux source-file ~/.tmux.conf  (or restart tmux) for new prefix."
   echo "  3. Open Activities -> launch 'Dev (tmux)' & 'Opencode (tmux)' once, right-click -> Pin to Dash."
   echo "  4. Open nvim and run :Lazy sync / :checkhealth telescope if anything looks off."
 fi
@@ -179,6 +177,4 @@ fi
 bold "Done. Verify:"
 echo "  tmux ls                       # tmux sessions (after first launch)"
 echo "  tmux show -g prefix           # expect: M-Space"
-echo "  tmux show -g @rose_pine_variant  # expect: main"
 echo "  readlink ~/.config/nvim ~/.tmux.conf  # -> points into the cfg repo"
-echo "  nvim -c ':colorscheme' +qa    # expect: rose-pine"

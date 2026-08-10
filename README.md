@@ -18,12 +18,12 @@ where the OS differs.
 |-------------------|---------------------------------------------------------|-------------------------------|
 | `setup.sh`        | **Unified installer** for both OSes (detects WSL)       | (header of the script)        |
 | `alacritty/`      | Active terminal: `base.toml` + `bindings-{linux,wsl}.toml` + vendored themes (~230) | see below |
-| `bin/`            | Helper scripts: `open-alacritty-config.sh`, `rose-pine-toggle.sh` | — |
+| `bin/`            | Helper scripts: `open-alacritty-config.sh`          | —                             |
 | `bash/`           | fzf **supplement** (not a full bashrc)                 | —                             |
 | `zsh/`            | Oh My Zsh tracked supplement (sourced from `~/.zshrc`) | —                             |
-| `lazygit/`        | LazyGit config with rose-pine theme (symlinked)        | —                             |
-| `tmux/`           | `tmux.conf`: prefix `Alt+Space`, truecolor, transparent bg, **tmux-resurrect + tmux-rose-pine plugins**, OS-aware clipboard | — |
-| `nvim/`           | Neovim config: lazy.nvim, native `vim.lsp`, C#/.NET-first, **rose-pine** colorscheme | [`nvim/README.md`](nvim/README.md), [`nvim/SETUP.md`](nvim/SETUP.md) |
+| `lazygit/`        | LazyGit config (symlinked)                            | —                             |
+| `tmux/`           | `tmux.conf`: prefix `Alt+Space`, truecolor, transparent bg, **tmux-resurrect** plugin, OS-aware clipboard | — |
+| `nvim/`           | Neovim config: lazy.nvim, native `vim.lsp`, C#/.NET-first, default colorscheme | [`nvim/README.md`](nvim/README.md), [`nvim/SETUP.md`](nvim/SETUP.md) |
 | `kitty/`          | Legacy/optional terminal (superseded by alacritty)     | —                             |
 | `devsetup/`       | Alacritty Dash launchers for `dev` + `opencode` tmux sessions (native Linux only) | [`devsetup/README.md`](devsetup/README.md) |
 | `git.txt`         | Personal SSH/git cheat-sheet (not a deployed config)   | —                             |
@@ -49,12 +49,12 @@ cd <CFG_DIR>
 ```
 
 What it does (OS-branching only where needed):
-- clones tmux plugins → `~/.local/share/tmux/plugins/{tmux-resurrect,tmux-rose-pine}`
+- clones tmux plugins → `~/.local/share/tmux/plugins/tmux-resurrect`
 - symlinks Debian-side configs into the repo: `~/.config/nvim`, `~/.tmux.conf`, and a `source` line in `~/.bashrc`
 - wires Alacritty:
   - native Linux → **symlinks** `base.toml` + `bindings-linux.toml` + `themes` into the repo
   - WSL → **copies** `base.toml` + `bindings-wsl.toml` + theme files to `%APPDATA%\alacritty` (Windows Alacritty can't follow Linux symlinks)
-- generates the tiny top-level `alacritty.toml` (imports base + OS bindings + `rose_pine.toml`)
+- generates the tiny top-level `alacritty.toml` (imports base + OS bindings; no theme import so Alacritty uses its built-in default colors)
 - bootstraps nvim plugins (`nvim --headless +Lazy!sync`)
 - native Linux only: runs `devsetup/install.sh` (GNOME Dash launchers)
 - prints remaining manual steps (restart Alacritty / `tmux source-file` / pin to Dash)
@@ -67,12 +67,12 @@ three files + a generated entry point (Alacritty `import` merges in order; array
 - `alacritty/base.toml` — shared (cursor, `startup_mode="Fullscreen"`, `opacity=0.85`). **No** `[keyboard]`, **no** theme import — so it never conflicts and never goes stale.
 - `alacritty/bindings-linux.toml` — `[keyboard]` using `bash -lc "…"`.
 - `alacritty/bindings-wsl.toml` — `[keyboard]` using `wsl -d debian -- bash -lc "…"`.
-- the generated `alacritty.toml` — just `[general] import = [base, OS bindings, rose_pine.toml]`. Edit the live theme by editing one import line (or use `bin/rose-pine-toggle.sh`, bound to Ctrl+Shift+B).
+- the generated `alacritty.toml` — just `[general] import = [base, OS bindings]`. No theme import, so Alacritty runs with its built-in default colors (edit it to add a theme import later).
 
 ## Notable design choices
 
-- **Alacritty** fullscreen + 0.85 opacity, **rose-pine**; config-edit hotkeys (`Ctrl+,` / `.` / `/`) open the alacritty/tmux/bash configs in new tmux nvim windows via `bin/open-alacritty-config.sh` (OS-aware).
-- **tmux** uses **tmux-resurrect** (cross-reboot session restore) + **tmux-rose-pine** status bar; truecolor passthrough; transparent window bg; clipboard is OS-aware (`clip.exe` on WSL, `xclip` on Linux) via one `if-shell`.
+- **Alacritty** fullscreen + 0.85 opacity, built-in default colors; config-edit hotkeys (`Ctrl+,` / `.` / `/`) open the alacritty/tmux/bash configs in new tmux nvim windows via `bin/open-alacritty-config.sh` (OS-aware).
+- **tmux** uses **tmux-resurrect** (cross-reboot session restore); truecolor passthrough; transparent window bg; clipboard is OS-aware (`clip.exe` on WSL, `xclip` on Linux) via one `if-shell`.
 - **neovim** uses **lazy.nvim** (ex-Packer) and the **native `vim.lsp`** API (no `nvim-lspconfig`), is **C#/.NET-first** (Roslyn + .NET 10 + netcoredbg DAP), and also covers Go / C/C++ / TypeScript + React / Angular / HTML+CSS. Leader: `<Space>`. Adds **telescope-fzf-native** (fzf operators `^ $ ' !` in finders) + `<leader>fS` glob grep — see [`nvim/SEARCH.md`](nvim/SEARCH.md).
 - **bash** fzf-supplement only (no prompt/aliases/PATH) — kept intentionally minimal; `~/.bashrc` remains the system default plus this `source`.
 
@@ -90,22 +90,18 @@ work — but recommended for the full terminal experience.
 # 1. Install Oh My Zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-# 2. Install the rose-pine theme — tracked copy of pixeljae/px-rose-pine.zsh
-#    with local tweaks (user@host segment in gold)
-cp zsh/px-rose-pine.zsh-theme "$ZSH/custom/themes/px-rose-pine.zsh-theme"
-
-# 3. Install community plugins
+# 2. Install community plugins
 git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions \
   ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting \
   ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
-# 4. Enable the theme and plugins (oh-my-zsh already generated ~/.zshrc)
+# 3. Enable a default theme and the plugins (oh-my-zsh already generated ~/.zshrc)
 #    Manually edit ~/.zshrc:
-#      ZSH_THEME="px-rose-pine"
+#      ZSH_THEME="robbyrussell"   # oh-my-zsh default
 #      plugins=(git sudo extract z zsh-autosuggestions zsh-syntax-highlighting)
 
-# 5. Install JetBrains Mono Nerd Font (for Powerline icons in the prompt)
+# 4. Install JetBrains Mono Nerd Font (for Powerline icons in the prompt)
 mkdir -p ~/.local/share/fonts
 curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip" \
   -o /tmp/JetBrainsMono.zip
@@ -113,7 +109,7 @@ unzip -q -o /tmp/JetBrainsMono.zip -d ~/.local/share/fonts/JetBrainsMono/
 fc-cache -f ~/.local/share/fonts/
 rm /tmp/JetBrainsMono.zip
 
-# 6. Update Alacritty font (if using Alacritty):
+# 5. Update Alacritty font (if using Alacritty):
 #    Edit alacritty/base.toml (or ~/.config/alacritty/alacritty.toml):
 #      [font]
 #      normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
@@ -122,11 +118,11 @@ rm /tmp/JetBrainsMono.zip
 #      bold_italic = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
 #      size = 11
 
-# 7. Change default shell
+# 6. Change default shell
 chsh -s /usr/bin/zsh
 #    Log out and back in for the change to take effect.
 
-# 8. Update tmux to use zsh as default shell
+# 7. Update tmux to use zsh as default shell
 #    Already set in cfg/tmux/.tmux.conf:
 #      set -g default-shell /usr/bin/zsh
 #    Apply to running server:

@@ -131,21 +131,20 @@ ln -sfn <CFG_DIR>/alacritty/themes             ~/.config/alacritty/themes
 
 - `base.toml` — shared (no `[keyboard]`, no theme): `startup_mode="Fullscreen"`, `opacity=0.85`, Block cursor, always-blink.
 - `bindings-{linux,wsl}.toml` — OS-specific `[keyboard]` (bash on Linux, `wsl -d debian` on Windows).
-- Theme: **rose-pine** (`themes/themes/rose_pine.toml`); switch by editing the single `import` line in the generated `alacritty.toml`. (`bin/rose-pine-toggle.sh` exists in the repo as an optional helper but is no longer installed by `setup.sh`.)
+- Theme: none (Alacritty uses its built-in default colors); optionally add a theme by editing the single `import` line in the generated `alacritty.toml`.
 - Hotkeys: `F11` toggle fullscreen, `F10` minimize,
   `Ctrl+,` edit `alacritty.toml` (new tmux window, via `bin/open-alacritty-config.sh`), `Ctrl+.` edit `.tmux.conf`,
   `Ctrl+/` edit `.bashrc`, `Ctrl+Home` send `cd ~`, `Ctrl+End` send `cd /`.
 
-### `tmux/` — plugins + rose-pine status bar
+### `tmux/` — plugins
 
 `setup.sh` symlinks `~/.tmux.conf` to `tmux/.tmux.conf` and clones the plugins
-to `~/.local/share/tmux/plugins/{tmux-resurrect,tmux-rose-pine}`.
+to `~/.local/share/tmux/plugins/tmux-resurrect`.
 
 - **Prefix remapped to `Alt+Space`** (default `Ctrl-b` is unbound).
 - `mouse on`, `base-index`/`pane-base-index` = 1, `mode-keys vi`.
-- Truecolor passthrough (`tmux-256color` + `terminal-features ",*:RGB"`) so Neovim/rose-pine renders its full palette.
-- Transparent window bg; **tmux-rose-pine** status bar (variant `main`).
-- **tmux-resurrect** is now included for cross-reboot session restore. "Restore" in these devsetup launchers means both *attach-to-existing* after a window close (`tmux new-session -A`) **and** full window/pane restore across a reboot via resurrect.
+- Truecolor passthrough (`tmux-256color` + `terminal-features ",*:RGB"`) so Neovim renders its full palette.
+- Transparent window bg; **tmux-resurrect** is now included for cross-reboot session restore. "Restore" in these devsetup launchers means both *attach-to-existing* after a window close (`tmux new-session -A`) **and** full window/pane restore across a reboot via resurrect.
 
 ### `bash/` — fzf **supplement** (not a standalone bashrc)
 
@@ -252,8 +251,6 @@ SSH key setup + `core.editor=vim` reminders. Reference only; nothing to link.
   ```bash
   tmux ls                          # dev: ..., opencode: ...
   tmux show -g prefix              # M-Space
-  tmux show -g @rose_pine_variant  # main
-  nvim -c ':colorscheme' +qa       # rose-pine
   readlink ~/.config/nvim ~/.tmux.conf   # -> points into the cfg repo
   ```
 

@@ -1,6 +1,8 @@
 export EDITOR='nvim'
 export VISUAL='nvim'
 
+export PATH="$HOME/.opencode/bin:$PATH"
+
 export KEYTIMEOUT=1
 bindkey -v
 
@@ -25,3 +27,28 @@ ZSH_AUTOSUGGEST_IGNORE_WIDGETS+=(tab-accept-or-complete)
 # In the fzf Ctrl+R history popup, Tab accepts the highlighted entry
 # (fzf's default Tab there is multi-select toggle, which does nothing useful).
 export FZF_CTRL_R_OPTS="--bind=tab:accept"
+
+# Monochrome prompt (white on black via the terminal palette): current dir +
+# git branch + dirty marker + prompt char. The rose-pine zsh theme
+# (px-rose-pine) has been removed; this override keeps the prompt colorless
+# regardless of whatever theme ~/.zshrc may load.
+ZSH_THEME_GIT_PROMPT_PREFIX=" ("
+ZSH_THEME_GIT_PROMPT_SUFFIX=")"
+ZSH_THEME_GIT_PROMPT_DIRTY="*"
+ZSH_THEME_GIT_PROMPT_CLEAN=""
+PROMPT='%~$(git_prompt_info) %# '
+RPROMPT=''
+
+# Remove all remaining colors from the shell. Both plugins are loaded by
+# oh-my-zsh (plugins=() in ~/.zshrc) BEFORE this file runs, but they re-read
+# their state at paint time, so overriding here neutralises them:
+#  - zsh-syntax-highlighting: stop painting commands green/red/etc.
+ZSH_HIGHLIGHT_HIGHLIGHTERS=()
+#  - zsh-autosuggestions: no grey tint on inline suggestions (plain white)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=white'
+
+# Disable ls/dir listing colors (oh-my-zsh aliases ls to `ls --color=tty`),
+# so directories and files no longer show purple/colored.
+unalias ls 2>/dev/null || true
+alias ls='ls --color=never'
+unset LS_COLORS
