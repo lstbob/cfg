@@ -30,7 +30,9 @@ vim.opt.smartcase = true
 
 -- transparent background (lets Alacritty opacity show through)
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+-- floating windows (diagnostics, hover, LspInfo, ...) get a grey surface so
+-- they stand out against the editor background
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#333333" })
 
 -- Dim-grey selection backgrounds so highlighted regions stay visible against
 -- the pure-black terminal background under the minimal white-on-black theme.
