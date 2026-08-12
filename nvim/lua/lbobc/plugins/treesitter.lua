@@ -8,6 +8,7 @@ return {
     local ensure_installed = {
       "c_sharp", "c", "go", "python", "rust", "lua",
       "angular", "typescript", "tsx", "javascript", "html", "css", "scss",
+      "markdown", "markdown_inline",
     }
     local installed = require("nvim-treesitter.config").get_installed()
     local to_install = vim.tbl_filter(function(lang)
