@@ -16,7 +16,22 @@ set -uo pipefail
 
 STATE_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/cfg-theme"
 RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
-CFG_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Resolve the repo root from this script's real location (follow symlinks, so a
+# symlinked install in ~/.local/bin still finds the repo). Falls back to the
+# known checkout path so a copied install works too. Configs always deploy under
+# ~/.config and point into the repo -- never under ~/.local.
+CFG_DIR=""
+_self="${BASH_SOURCE[0]:-$0}"
+if [ -L "$_self" ]; then
+  _dir="$(cd "$(dirname "$(readlink -f "$_self")")/.." && pwd)"
+  [ -d "$_dir/alacritty" ] && [ -d "$_dir/tmux" ] && CFG_DIR="$_dir"
+fi
+if [ -z "$CFG_DIR" ]; then
+  for _cand in "$HOME/dev/cfg" "$HOME/cfg" "/mnt/data/dev/cfg"; do
+    if [ -d "$_cand/alacritty" ] && [ -d "$_cand/tmux" ]; then CFG_DIR="$_cand"; break; fi
+  done
+fi
+[ -n "$CFG_DIR" ] || { echo "theme-toggle: cannot locate the cfg repo (looked via script path + ~/dev/cfg, ~/cfg, /mnt/data/dev/cfg)." >&2; exit 1; }
 IS_WSL=0
 if grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null; then IS_WSL=1; fi
 
