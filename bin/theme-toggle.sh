@@ -81,16 +81,21 @@ if tmux info >/dev/null 2>&1; then
   tmux display-message "theme: ${theme}" 2>/dev/null || true
 fi
 
-# --- 4) Neovim: tell every running instance to re-apply the float bg + selection
-#        bg (and keep Normal transparent). Fresh nvim reads the state file at
-#        startup (core/options.lua). --------------------------------------------
+# --- 4) Neovim: flip `background` so the built-in habamax colorscheme repaints
+#        syntax text to match the new terminal. Setting `background` re-applies
+#        the current colorscheme and fires ColorScheme, which our autocmd
+#        (registered in core/options.lua) catches to re-apply transparency +
+#        float/selection bgs. We also apply explicitly in case the value didn't
+#        change (no event). Fresh nvim reads the state file at startup. Note: do
+#        NOT call `:colorscheme default` -- on nvim 0.12 the built-in is
+#        `habamax`, and `vim.o.background` alone re-applies it correctly. ------
 shopt -s nullglob
 if [ "$theme" = "light" ]; then
   sel_bg="#eee8d5"; float_bg="#efeadb"
 else
   sel_bg="#3c3c3c"; float_bg="#252525"
 fi
-local_snippet="vim.api.nvim_set_hl(0,'Normal',{bg='none'});vim.api.nvim_set_hl(0,'NormalFloat',{bg='${float_bg}'});vim.api.nvim_set_hl(0,'FloatBorder',{bg='${float_bg}'});vim.api.nvim_set_hl(0,'Visual',{bg='${sel_bg}'});vim.api.nvim_set_hl(0,'PmenuSel',{bg='${sel_bg}'});vim.api.nvim_set_hl(0,'TelescopeSelection',{bg='${sel_bg}'}))"
+local_snippet="vim.g.cfg_theme='${theme}';vim.o.background='${theme}';vim.api.nvim_set_hl(0,'Normal',{bg='none'});vim.api.nvim_set_hl(0,'NormalFloat',{bg='${float_bg}'});vim.api.nvim_set_hl(0,'FloatBorder',{bg='${float_bg}'});vim.api.nvim_set_hl(0,'Visual',{bg='${sel_bg}'});vim.api.nvim_set_hl(0,'PmenuSel',{bg='${sel_bg}'});vim.api.nvim_set_hl(0,'TelescopeSelection',{bg='${sel_bg}'}))"
 for sock in "$RUNTIME_DIR"/nvim.*; do
   [ -S "$sock" ] || continue
   timeout 2 nvim --server "$sock" --remote-expr "execute('lua ${local_snippet}')" >/dev/null 2>&1 || true
