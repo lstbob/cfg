@@ -33,7 +33,7 @@ vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
 -- Dim-grey selection backgrounds so highlighted regions stay visible against
--- the pure-black terminal background under the minimal white-on-black theme.
-vim.api.nvim_set_hl(0, "Visual", { bg = "#333333" })
-vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#333333" })
-vim.api.nvim_set_hl(0, "TelescopeSelection", { bg = "#333333" })
+-- the soft-neutral-gray terminal background (alacritty bg #1e1e1e / fg #d4d4d4).
+vim.api.nvim_set_hl(0, "Visual", { bg = "#3c3c3c" })
+vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#3c3c3c" })
+vim.api.nvim_set_hl(0, "TelescopeSelection", { bg = "#3c3c3c" })
