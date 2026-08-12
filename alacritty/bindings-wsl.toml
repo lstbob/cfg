@@ -9,6 +9,8 @@ bindings = [
   # tmux bindings for configuring (kept out of tmux.conf so session bindings stay clean)
   { key = "Comma", mods = "Control", command = { program = "wsl", args = ["-d", "debian", "--", "bash", "-lc", "$HOME/.local/bin/open-alacritty-config.sh"] } },
   { key = "Period", mods = "Control", command = { program = "wsl", args = ["-d", "debian", "--", "bash", "-lc", "tmux new-window 'nvim ~/.tmux.conf'"] } },
+  # theme-toggle: cycle dark<->light across alacritty+tmux+nvim+lazygit+shells
+  { key = "B", mods = "Control|Shift", command = { program = "wsl", args = ["-d", "debian", "--", "bash", "-lc", "$HOME/.local/bin/theme-toggle.sh"] } },
   { key = "Home", mods = "Control", command = { program = "wsl", args = ["-d", "debian", "--", "bash", "-lc", "tmux send-keys 'cd ~' Enter"] } },
   { key = "End", mods = "Control", command = { program = "wsl", args = ["-d", "debian", "--", "bash", "-lc", "tmux send-keys 'cd /' Enter"] } },
   { key = "Slash", mods = "Control", command = { program = "wsl", args = ["-d", "debian", "--", "bash", "-lc", "tmux new-window 'nvim ~/.bashrc'"] } },

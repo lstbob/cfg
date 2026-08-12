@@ -1,0 +1,57 @@
+# Shared Alacritty LIGHT base config — the "soft light" pole of the dark<->light
+# cfg theme toggle. Identical to base.toml except for the inline [colors.*]
+# palette: Solarized Light (warm paper bg, muted fg) — the canonical easy-on-
+# the-eyes light scheme for bright-room / daytime coding. book-like, low strain.
+# No theme plugin / no import — inline only. bin/theme-toggle.sh swaps the
+# deployed base.toml symlink/copy between this file and base.toml (dark).
+#
+# The generated top-level alacritty.toml imports `base.toml` (the deployed name),
+# so toggling just repoints that one file — no alacritty.toml edit needed.
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+bold_italic = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
+size = 11
+
+[cursor]
+style = { shape = "Block", blinking = "Always" }
+blink_interval = 300
+
+[window]
+startup_mode = "Fullscreen"
+opacity = 1.0
+
+# Solarized Light
+[colors.primary]
+background = "#fdf6e3"
+foreground = "#586e75"
+
+[colors.cursor]
+text = "#fdf6e3"
+cursor = "#586e75"
+
+[colors.selection]
+text = "#fdf6e3"
+background = "#eee8d5"
+
+[colors.normal]
+black   = "#073642"
+red     = "#dc322f"
+green   = "#859900"
+yellow  = "#b58900"
+blue    = "#268bd2"
+magenta = "#d33682"
+cyan    = "#2aa198"
+white   = "#eee8d5"
+
+[colors.bright]
+black   = "#002b36"
+red     = "#cb4b16"
+green   = "#586e75"
+yellow  = "#657b83"
+blue    = "#839496"
+magenta = "#6c71c4"
+cyan    = "#93a1a1"
+white   = "#fdf6e3"

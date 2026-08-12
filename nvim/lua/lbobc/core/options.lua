@@ -32,8 +32,20 @@ vim.opt.smartcase = true
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
--- Dim-grey selection backgrounds so highlighted regions stay visible against
--- the soft-neutral-gray terminal background (alacritty bg #1e1e1e / fg #d4d4d4).
-vim.api.nvim_set_hl(0, "Visual", { bg = "#3c3c3c" })
-vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#3c3c3c" })
-vim.api.nvim_set_hl(0, "TelescopeSelection", { bg = "#3c3c3c" })
+-- Dim-grey selection backgrounds so highlighted regions stay visible; the
+-- shade tracks the cfg theme (dark soft-gray vs Solarized Light). Read the
+-- shared state file so a fresh nvim matches whatever bin/theme-toggle.sh last
+-- set; a live toggle re-applies via the toggle script's RPC.
+local _xdg = os.getenv("XDG_CONFIG_HOME")
+local _cfg_theme_path = (_xdg and _xdg ~= "" and _xdg or vim.fn.expand("~/.config")) .. "/cfg-theme"
+local _theme = "dark"
+if vim.fn.filereadable(_cfg_theme_path) == 1 then
+  local _ok, _lines = pcall(vim.fn.readfile, _cfg_theme_path)
+  if _ok and _lines and _lines[1] == "light" then
+    _theme = "light"
+  end
+end
+local _sel_bg = (_theme == "light") and "#eee8d5" or "#3c3c3c"
+vim.api.nvim_set_hl(0, "Visual", { bg = _sel_bg })
+vim.api.nvim_set_hl(0, "PmenuSel", { bg = _sel_bg })
+vim.api.nvim_set_hl(0, "TelescopeSelection", { bg = _sel_bg })

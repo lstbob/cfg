@@ -1,0 +1,29 @@
+# Light lazygit theme — Solarized Light. Dark ink text on warm paper; the only
+# hue kept is red for unstaged changes (a real signal worth preserving). Pairs
+# with alacritty base-light.toml / tmux .tmux-light.conf. No plugin involved —
+# just hex colours. toggle script repoints ~/.config/lazygit/config.yml between
+# this file and config.yml (dark).
+gui:
+  theme:
+    activeBorderColor:
+      - "#073642"
+      - bold
+    inactiveBorderColor:
+      - "#93a1a1"
+    searchingActiveBorderColor:
+      - "#073642"
+      - bold
+    optionsTextColor:
+      - "#586e75"
+    selectedLineBgColor:
+      - "#eee8d5"
+    cherryPickedCommitBgColor:
+      - "#eee8d5"
+    cherryPickedCommitFgColor:
+      - "#073642"
+    unstagedChangesColor:
+      - "#dc322f"
+    defaultFgColor:
+      - "#073642"
+    searchingActiveColor:
+      - "#586e75"
