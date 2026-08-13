@@ -66,7 +66,14 @@ command -v opencode >/dev/null 2>&1 || [ -x "$HOME/.opencode/bin/opencode" ] \
 green "prerequisites present."
 
 # --- directories ----------------------------------------------------------------
-mkdir -p "$PLUGINS_DIR" "$LOCAL_BIN" "$HOME/.config/alacritty" "$NVIM_CONFIG"
+STATE_FILE="$HOME/.config/cfg-theme"
+mkdir -p "$PLUGINS_DIR" "$LOCAL_BIN" "$HOME/.config/alacritty" "$NVIM_CONFIG" "$HOME/.config/lazygit" "$(dirname "$STATE_FILE")"
+
+# --- shared cfg-theme state file (default dark; bin/theme-toggle.sh flips it) --
+if [ ! -f "$STATE_FILE" ]; then
+  printf 'dark\n' > "$STATE_FILE"
+  info "wrote default $STATE_FILE (dark)"
+fi
 
 # --- tmux plugins (clone if missing) -------------------------------------------
 clone_plugin() { # <repo-url> <dir-name>
@@ -104,28 +111,49 @@ install_bin() { # <src>
   info "installed $LOCAL_BIN/$name"
 }
 install_bin "$CFG_DIR/bin/open-alacritty-config.sh"
+install_bin "$CFG_DIR/bin/theme-toggle.sh"
+
+# --- tmux status fragments (dark/light), sourced by .tmux.conf on cfg-theme ----
+link "$CFG_DIR/tmux/.tmux-dark.conf" "$HOME/.tmux-dark.conf"
+link "$CFG_DIR/tmux/.tmux-light.conf" "$HOME/.tmux-light.conf"
+
+# --- lazygit config (symlinked; theme-toggle.sh repoints this between
+#     config.yml (dark) and config-light.yml based on cfg-theme) ---------------
+LG_CFG_NAME="config.yml"
+[ "$(cat "$STATE_FILE" 2>/dev/null)" = "light" ] && LG_CFG_NAME="config-light.yml"
+link "$CFG_DIR/lazygit/${LG_CFG_NAME}" "$HOME/.config/lazygit/config.yml"
 
 # --- Alacritty config -----------------------------------------------------------
+# Both dark (base.toml) and light (base-light.toml) bases are deployed; the
+# active one is chosen by the cfg-theme state file (bin/theme-toggle.sh flips
+# it live). alacritty.toml imports `base.toml` (the deployed name) regardless.
 if [ "$IS_WSL" = 1 ]; then
   # Alacritty runs on Windows and can't follow Linux symlinks -> copy files.
   winuser="$(cmd.exe /c 'echo %USERNAME%' 2>/dev/null | tr -d '\r\n')"
   ALA_DIR="/mnt/c/Users/${winuser}/AppData/Roaming/alacritty"
   mkdir -p "$ALA_DIR/themes/themes"
-  cp -f "$CFG_DIR/alacritty/base.toml" "$ALA_DIR/base.toml"
+  cp -f "$CFG_DIR/alacritty/base-light.toml" "$ALA_DIR/base-light.toml"
+  ALA_BASE_SRC="$CFG_DIR/alacritty/base.toml"
+  [ "$(cat "$STATE_FILE" 2>/dev/null)" = "light" ] && ALA_BASE_SRC="$CFG_DIR/alacritty/base-light.toml"
+  cp -f "$ALA_BASE_SRC" "$ALA_DIR/base.toml"
   cp -f "$CFG_DIR/alacritty/bindings-wsl.toml" "$ALA_DIR/bindings-wsl.toml"
   # only the color-scheme tomls are needed (alacritty-theme ships ~190 preview PNGs)
   cp -f "$CFG_DIR/alacritty/themes/themes/"*.toml "$ALA_DIR/themes/themes/" 2>/dev/null || true
-  info "copied base/bindings + theme files to $ALA_DIR"
+  info "copied base/bindings + theme files to $ALA_DIR (active: $(basename "$ALA_BASE_SRC"))"
 else
   ALA_DIR="$HOME/.config/alacritty"
-  link "$CFG_DIR/alacritty/base.toml" "$ALA_DIR/base.toml"
+  link "$CFG_DIR/alacritty/base-light.toml" "$ALA_DIR/base-light.toml"
+  ALA_BASE_TGT="$CFG_DIR/alacritty/base.toml"
+  [ "$(cat "$STATE_FILE" 2>/dev/null)" = "light" ] && ALA_BASE_TGT="$CFG_DIR/alacritty/base-light.toml"
+  link "$ALA_BASE_TGT" "$ALA_DIR/base.toml"
   link "$CFG_DIR/alacritty/bindings-linux.toml" "$ALA_DIR/bindings-linux.toml"
   link "$CFG_DIR/alacritty/themes" "$ALA_DIR/themes"
-  info "symlinked alacritty base/bindings/themes"
+  info "symlinked alacritty base/bindings/themes (active: $(basename "$ALA_BASE_TGT"))"
 fi
 
-# Generate the top-level alacritty.toml (imports base + OS bindings; no theme
-# import so Alacritty uses its built-in default colors).
+# Generate the top-level alacritty.toml (imports base + OS bindings). The base
+# file itself carries the inline palette (dark or light), so no separate theme
+# import is needed here.
 ALA_TOP="$ALA_DIR/alacritty.toml"
 if [ "$IS_WSL" = 1 ]; then
   # Windows: ~ expands to %USERPROFILE% inside Alacritty; use backslash paths.

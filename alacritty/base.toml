@@ -3,9 +3,11 @@
 # with the OS-specific bindings file and never goes stale against the theme.
 # The generated top-level alacritty.toml imports this + the OS bindings.
 #
-# Minimal white-on-black: opaque pure-black background, white base foreground.
-# The 16-color ANSI palette is left at Alacritty defaults so fzf / nvim syntax
-# highlighting / zsh-syntax-highlighting validity feedback all keep working.
+# Soft neutral-gray dark theme. Replaces the earlier pure black/white (harsh on
+# the eyes) with a near-black background and soft off-white foreground, plus a
+# muted/desaturated 16-color ANSI palette. nvim's default (treesitter) syntax
+# highlighting, fzf, ls, git, and bat all read this ANSI palette, so everything
+# reads calm instead of neon-on-black. No theme plugin / no import — inline only.
 
 [font]
 normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
@@ -23,5 +25,33 @@ startup_mode = "Fullscreen"
 opacity = 1.0
 
 [colors.primary]
-background = "#000000"
-foreground = "#ffffff"
+background = "#1e1e1e"
+foreground = "#d4d4d4"
+
+[colors.cursor]
+text = "#1e1e1e"
+cursor = "#d4d4d4"
+
+[colors.selection]
+text = "#1e1e1e"
+background = "#6e6e6e"
+
+[colors.normal]
+black   = "#1c1c1c"
+red     = "#bc5653"
+green   = "#909d63"
+yellow  = "#ebc17a"
+blue    = "#7eaac7"
+magenta = "#aa6292"
+cyan    = "#86d3ce"
+white   = "#cacaca"
+
+[colors.bright]
+black   = "#636363"
+red     = "#bc5653"
+green   = "#909d63"
+yellow  = "#ebc17a"
+blue    = "#7eaac7"
+magenta = "#aa6292"
+cyan    = "#86d3ce"
+white   = "#e0e0e0"

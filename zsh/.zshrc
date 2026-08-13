@@ -44,8 +44,9 @@ RPROMPT=''
 # their state at paint time, so overriding here neutralises them:
 #  - zsh-syntax-highlighting: stop painting commands green/red/etc.
 ZSH_HIGHLIGHT_HIGHLIGHTERS=()
-#  - zsh-autosuggestions: no grey tint on inline suggestions (plain white)
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=white'
+#  - zsh-autosuggestions: dim grey (bright-black) inline suggestions instead of
+#    stark plain white, matching the soft-neutral-gray terminal palette.
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
 # Disable ls/dir listing colors (oh-my-zsh aliases ls to `ls --color=tty`),
 # so directories and files no longer show purple/colored.
