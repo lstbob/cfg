@@ -63,6 +63,12 @@ vim.keymap.set("n", "<leader>ct", function()
   vim.cmd("Ex")
 end, { desc = "Close tab with file explorer" })
 
+-- lcd to current buffer's directory
+vim.keymap.set("n", "<leader>cd", function()
+  vim.cmd("lcd %:p:h")
+  print("lcd → " .. vim.fn.getcwd())
+end, { desc = "lcd to current file's directory" })
+
 -- toggle background dark/light
 vim.keymap.set("n", "<leader>tb", function()
   if vim.o.background == "dark" then
